@@ -1,17 +1,3 @@
-/* 
-* The Traveler Class
-
-The Traveler class (blueprint) should set the following properties for each instance:
-
-    a name, which must be provided as a parameter to the constructor.
-    an amount of food, with an initial value of 1.
-    an isHealthy property, with an initial value of true, which indicates whether a traveler is sick.
-
-The Traveler class should also have the following methods:
-
-    hunt() – Increases the traveler's food by 2.
-    eat() – Consumes 1 unit of the traveler's food. If the traveler doesn't have any food left to eat, the traveler is no longer healthy (set isHealthy to false).
-*/
 class Traveler {
   constructor(name) {
     this.name = name;
@@ -22,58 +8,55 @@ class Traveler {
     this.food += 2;
   }
   eat() {
-    this.food--;
-    if (this.food < 1) {
+    if (this.food > 0) {
+      this.food--;
+      this.isHealthy = true;
+    } else {
       this.isHealthy = false;
     }
   }
 }
-/*
-* The Wagon Class
-
-The Wagon class should set the following properties for each instance:
-
-    a capacity, which must be provided to the constructor: this is the maximum number of passengers a wagon can hold.
-    a passengers list, which is initially an empty array.
-
-The Wagon class should have these methods:
-
-    getAvailableSeatCount() – Returns the number of empty seats, determined by the capacity set when the wagon was created, subtracted by the number of passengers currently on board.
-    join(traveler) - Adds the traveler to the wagon if there is space. If the wagon is already at maximum capacity, don't add them.
-    shouldQuarantine() - Returns true if there is at least one unhealthy person in the wagon. Return false if not.
-    totalFood() - Returns the total amount of food among all passengers in the wagon.
-*/
-class Wagon extends Traveler {
+class Wagon {
   constructor(cap) {
+    // super();
     this.capacity = cap;
-    this.passengersList = [];
-    super(name);
+    this.passengers = [];
     //Got call info from class Traveler. Is 'extends' the answer?
+    //Cramer said not 'extends'
   }
   getAvailableSeatCount() {
-    this.capacity = this.capacity - this.passengersList.length;
+    return this.capacity - this.passengers.length;
     // cap minus current passengers list = avail in Numbers or String
   }
   join(traveler) {
-    this.getAvailableSeatCount();
-    if (this.passengersList.length < this.capacity) {
-      this.passengersList.push();
+    if (this.passengers.length < this.capacity) {
+      return this.passengers.push(traveler);
     } else {
       return false;
     }
   }
   shouldQuarantine() {
-    if (Traveler.isHealthy === false) {
-      return true;
-    } else {
-      return false;
+    for (let i = 0; i < this.passengers.length; i++) {
+      if (this.passengers[i].isHealthy === false) {
+        return true;
+      }
     }
+    return false;
   }
   totalFood() {
-    for (i = 0; i < Wagon.passengersList.length; i++) {
-      Traveler.food++;
+    for (var i = 0, result = 0; i < this.passengers.length; i++) {
+      result += this.passengers[i].food;
     }
-    // Will this properly add each of the passengers food by calling it by ClassName.property?
-    // Syntax used twice - Traveler.food & Traveler.isHealthy
+    return result;
   }
 }
+
+/* Stretch Goals
+
+    Add the wagons and the travelers to the DOM.
+    Display relevent information in the DOM about the wagons and traveler – for example: travelers name/food/isHealthy, and/or Wagon's passengers/capacity.
+    Add buttons to your classes – for example: make a traveler eat, add a traveler to a wagon, check if a wagon should quarantine, etc.
+    Add a button to create a new traveler based on a name the user inputs.
+    Add animations simulating travel, etc.
+    Generally just make your game feel more like the original Oregon Trail.
+*/
